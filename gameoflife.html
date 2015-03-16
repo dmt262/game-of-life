@@ -8,6 +8,20 @@
 
 <h1>Game of Life</h1>
 
+
+
+<div class="board" id="board">
+   <div class="row" id="r_0">
+    <div class="cell" id="c_0_0"></div>
+    <div class="cell on" id="c_0_1"> </div>
+  </div>
+  <div class="row" id="r_0">
+    <div class="cell on" id="c_0_0"></div>
+    <div class="cell" id="c_0_1"> </div>
+  </div>
+</div>
+
+
 <script>
 console.log("I am here");
 
@@ -23,15 +37,32 @@ var board = [
               [0,0,0,0,0,0,0,0,0,0],
               [0,0,0,0,0,0,0,0,0,0],
             ];
+var thisBoard;
+var thisRow;
+var thisCell;
 
-$("#board").empty();
+thisBoard = $('#board');
+console.log(thisBoard);
+thisBoard.empty();
 console.log("num rows: "+ board.length);
 for (i=0; i<10; i++) {  // rows
-  thisRow = $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board")
+  thisRow = $("<div>");
+  thisRow.addClass("row");
+  thisRow.attr("id", "r_"+i);
+//  thisRow = $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
+  $("#board").append(thisRow); //  $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
   console.log(thisRow);
   for (j=0; j<10; j++) {
+    thisCell = $("<div>");
+    thisCell.addClass("cell");
+    if (board[i][j] === 1) {
+      thisCell.addClass("on");
+    }
+    thisCell.attr("id", "c_"+i+"_"+j);
     console.log(i+","+j+": "+board[i][j]);
-    thisCell = $("<div class=\"cell\" id=\"c_"+i+"_"+j+"\"></div>").appendTo(thisRow);
+    console.log(thisCell);
+    thisRow.append(thisCell);
+//    thisCell = $("<div class=\"cell\" id=\"c_"+i+"_"+j+"\"></div>").appendTo(thisRow);
   }
 }
 
@@ -60,17 +91,6 @@ for (i=0; i<10; i++) {  // rows
 </style>
 
 
-<div id="board">
-  <div class="row" id="r_0">
-    <div class="cell" id="c_0_0"></div>
-    <div class="cell on" id="c_0_1"> </div>
-  </div>
-    <div class="row" id="r_0">
-    <div class="cell on" id="c_0_0"></div>
-    <div class="cell" id="c_0_1"> </div>
-  </div>
-</div>
 
-<div style="width: 40px; height: 40px; background-color: #666666;"></div>
 </body>
 </html>
