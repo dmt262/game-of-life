@@ -30,7 +30,46 @@ console.log("I am here");
 
 var gameoflife_viewjq = {
   gol: gameoflife,
+  cellDivs: [],
 
+  buildboard: function (n, pct) {
+    var thisBoard;
+    var thisRow;
+    var thisCell;
+
+    this.gol.setBoardSize(n);
+    this.gol.setRandomBoard(pct);
+    
+    thisBoard = $('#board');
+    //console.log(thisBoard);
+    thisBoard.empty();
+    console.log("num rows: "+ board.length);
+    for (i=0; i<this.gol.cells.length; i++) {  // rows
+      this.cellDivs.push([]);
+      thisRow = $("<div>");
+      thisRow.addClass("row");
+      thisRow.attr("id", "r_"+i);
+    //  thisRow = $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
+      $("#board").append(thisRow); //  $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
+      //console.log(thisRow);
+      for (j=0; j<this.gol.cells[i].length; j++) {
+        thisCell = $("<div>");
+        thisCell.addClass("cell");
+        if (this.gol.cells[i][j] === 1) {
+          thisCell.addClass("on");
+        }
+        thisCell.attr("id", "c_"+i+"_"+j);
+
+        //console.log(i+","+j+": "+board[i][j]);
+        //console.log(thisCell);
+        thisRow.append(thisCell);
+        this.cellDivs[i].push(thisCell);
+    //    thisCell = $("<div class=\"cell\" id=\"c_"+i+"_"+j+"\"></div>").appendTo(thisRow);
+      }
+    }
+  },
+  
+// Make this function not create the new divs - just set the class to cell or cell, on for each div
   display:  function () {
            
     var thisBoard;
@@ -66,8 +105,8 @@ var gameoflife_viewjq = {
 
 
 
-gameoflife_viewjq.gol.setBoardSize(50);
-gameoflife_viewjq.gol.setRandomBoard(0.2);
+gameoflife_viewjq.buildboard(50,0.2);
+//gameoflife_viewjq.gol.setRandomBoard(0.2);
 console.log(gameoflife_viewjq.gol.cells);
 
 gameoflife_viewjq.display();
