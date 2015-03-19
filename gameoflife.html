@@ -3,6 +3,7 @@
 <head>
   <title>Game of Life</title>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="gameoflife.js"></script>
 </head>
 <body>
 
@@ -25,46 +26,52 @@
 <script>
 console.log("I am here");
 
-var board = [ 
-              [1,0,1,0,0,0,0,0,0,0],
-              [0,0,0,0,0,0,0,0,0,0],
-              [0,0,1,1,0,0,0,0,0,0],
-              [0,0,0,1,1,0,0,0,0,0],
-              [0,0,0,0,1,1,0,0,0,0],
-              [0,0,0,0,0,0,0,0,0,0],
-              [0,0,0,0,0,0,0,0,0,0],
-              [0,0,0,0,0,0,0,0,0,0],
-              [0,0,0,0,0,0,0,0,0,0],
-              [0,0,0,0,0,0,0,0,0,0],
-            ];
-var thisBoard;
-var thisRow;
-var thisCell;
 
-thisBoard = $('#board');
-console.log(thisBoard);
-thisBoard.empty();
-console.log("num rows: "+ board.length);
-for (i=0; i<10; i++) {  // rows
-  thisRow = $("<div>");
-  thisRow.addClass("row");
-  thisRow.attr("id", "r_"+i);
-//  thisRow = $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
-  $("#board").append(thisRow); //  $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
-  console.log(thisRow);
-  for (j=0; j<10; j++) {
-    thisCell = $("<div>");
-    thisCell.addClass("cell");
-    if (board[i][j] === 1) {
-      thisCell.addClass("on");
+
+var gameoflife_viewjq = {
+  gol: gameoflife,
+
+  display:  function () {
+           
+    var thisBoard;
+    var thisRow;
+    var thisCell;
+    
+    thisBoard = $('#board');
+    //console.log(thisBoard);
+    thisBoard.empty();
+    console.log("num rows: "+ board.length);
+    for (i=0; i<this.gol.cells.length; i++) {  // rows
+      thisRow = $("<div>");
+      thisRow.addClass("row");
+      thisRow.attr("id", "r_"+i);
+    //  thisRow = $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
+      $("#board").append(thisRow); //  $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
+      //console.log(thisRow);
+      for (j=0; j<this.gol.cells[i].length; j++) {
+        thisCell = $("<div>");
+        thisCell.addClass("cell");
+        if (this.gol.cells[i][j] === 1) {
+          thisCell.addClass("on");
+        }
+        thisCell.attr("id", "c_"+i+"_"+j);
+        //console.log(i+","+j+": "+board[i][j]);
+        //console.log(thisCell);
+        thisRow.append(thisCell);
+    //    thisCell = $("<div class=\"cell\" id=\"c_"+i+"_"+j+"\"></div>").appendTo(thisRow);
+      }
     }
-    thisCell.attr("id", "c_"+i+"_"+j);
-    console.log(i+","+j+": "+board[i][j]);
-    console.log(thisCell);
-    thisRow.append(thisCell);
-//    thisCell = $("<div class=\"cell\" id=\"c_"+i+"_"+j+"\"></div>").appendTo(thisRow);
   }
 }
+
+
+
+gameoflife_viewjq.gol.setBoardSize(50);
+gameoflife_viewjq.gol.setRandomBoard(0.2);
+console.log(gameoflife_viewjq.gol.cells);
+
+gameoflife_viewjq.display();
+
 
 </script>
 
