@@ -33,7 +33,7 @@
     </select>
     <button onclick="gameoflife_viewjq.gol.setRandomBoard($('#rndpct').val());  gameoflife_viewjq.display();">Randomize Board</button>
     <button onclick="gameoflife_viewjq.step();">Step</button>
-    <button id="startstoptimer" onclick="gameoflife_viewjq.toggleTimer();">Stop Timer</button>
+    <button id="startstoptimer" onclick="gameoflife_viewjq.toggleTimer();">Start Timer</button>
     Cycles: <span id="cycles"></span>
     Population: <span id="population"></span><br \>
   </div>
@@ -108,14 +108,8 @@ var gameoflife_viewjq = {
 
     thisBoard = $('#board');
     //console.log(thisBoard);
-    thisBoard.empty();
+    //thisBoard.empty();
     for (i=0; i<this.gol.cells.length; i++) {  // rows
-      thisRow = $("<div>");
-      thisRow.addClass("row");
-      thisRow.attr("id", "r_"+i);
-    //  thisRow = $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
-      $("#board").append(thisRow); //  $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
-      //console.log(thisRow);
       for (j=0; j<this.gol.cells[i].length; j++) {
         thisCell =(typeof this.cellDivs[i][j] != 'undefined') ? this.cellDivs[i][j] : $("<div>");
         thisCell.addClass("cell");
@@ -126,7 +120,7 @@ var gameoflife_viewjq = {
         thisCell.attr("id", "c_"+i+"_"+j);
         //console.log(i+","+j+": "+board[i][j]);
         //console.log(thisCell);
-        thisRow.append(thisCell);
+        //thisRow.append(thisCell);
     //    thisCell = $("<div class=\"cell\" id=\"c_"+i+"_"+j+"\"></div>").appendTo(thisRow);
       }
     }
@@ -188,6 +182,12 @@ function myCode() {
     height: 10px;
     border: 0px;
     margin: 5px;
+    -webkit-transition-property: background-color;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease-in;
+    transition-property: background-color;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-in;
   }
   .on {
     background-color: #999999;
