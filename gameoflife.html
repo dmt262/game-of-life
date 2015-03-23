@@ -9,41 +9,44 @@
 
 <h1>Game of Life</h1>
 
-<h2>Rules:</h2>
-<ol>
-  <li>Any live cell with fewer than two live neighbours dies, as if caused by under-population.</li>
-  <li>Any live cell with two or three live neighbours lives on to the next generation.</li>
-  <li>Any live cell with more than three live neighbours dies, as if by overcrowding.</li>
-  <li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
-</ol>
-
-<select id="rndpct">
-   <option value="0.1">0.1</value>
-   <option value="0.2">0.2</value>
-   <option value="0.3">0.3</value>
-   <option value="0.4">0.4</value>
-   <option value="0.5">0.5</value>
-   <option value="0.6">0.6</value>
-   <option value="0.7">0.7</value>
-   <option value="0.8">0.8</value>
-   <option value="0.9">0.9</value>
-   <option value="1.0">1.0</value>
-</select>
-<button onclick="gameoflife_viewjq.gol.setRandomBoard($('#rndpct').val());  gameoflife_viewjq.display();">Randomize Board</button>
-<button onclick="gameoflife_viewjq.step();">Step</button>
-<button onclick="gameoflife_viewjq.run = 1;">Start Timer</button>
-<button onclick="gameoflife_viewjq.run = 0;">Stop Timer</button>
-Cycles: <input id="cycles" type="text">
-
-
-<div class="board" id="board">
-   <div class="row" id="r_0">
-    <div class="cell" id="c_0_0"></div>
-    <div class="cell on" id="c_0_1"> </div>
+<div id="gameoflife">
+  <div id="controls">
+    <h2>Rules:</h2>
+    <ol>
+      <li>Any live cell with fewer than two live neighbours dies, as if caused by under-population.</li>
+      <li>Any live cell with two or three live neighbours lives on to the next generation.</li>
+      <li>Any live cell with more than three live neighbours dies, as if by overcrowding.</li>
+      <li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
+    </ol>
+    
+    <select id="rndpct">
+       <option value="0.1">0.1</value>
+       <option value="0.2">0.2</value>
+       <option value="0.3">0.3</value>
+       <option value="0.4">0.4</value>
+       <option value="0.5">0.5</value>
+       <option value="0.6">0.6</value>
+       <option value="0.7">0.7</value>
+       <option value="0.8">0.8</value>
+       <option value="0.9">0.9</value>
+       <option value="1.0">1.0</value>
+    </select>
+    <button onclick="gameoflife_viewjq.gol.setRandomBoard($('#rndpct').val());  gameoflife_viewjq.display();">Randomize Board</button>
+    <button onclick="gameoflife_viewjq.step();">Step</button>
+    <button id="startstoptimer" onclick="gameoflife_viewjq.toggleTimer();">Stop Timer</button>
+    Cycles: <span id="cycles"></span>
+    Population: <span id="population"></span><br \>
   </div>
-  <div class="row" id="r_0">
-    <div class="cell on" id="c_0_0"></div>
-    <div class="cell" id="c_0_1"> </div>
+
+  <div id="board" class="board">
+     <div class="row" id="r_0">
+      <div class="cell" id="c_0_0"></div>
+      <div class="cell on" id="c_0_1"> </div>
+    </div>
+    <div class="row" id="r_0">
+      <div class="cell on" id="c_0_0"></div>
+      <div class="cell" id="c_0_1"> </div>
+    </div>
   </div>
 </div>
 
@@ -132,6 +135,19 @@ var gameoflife_viewjq = {
   step: function() {
     this.gol.step(); 
     this.display();
+    $('#cycles').html(gameoflife_viewjq.gol.numSteps);
+    $('#population').html(gameoflife_viewjq.gol.population);
+  },
+
+  toggleTimer: function () {
+    
+    if (this.run === 0) {
+      this.run = 1;
+      $('#startstoptimer').html("Stop Timer");
+    } else {
+      this.run = 0;
+      $('#startstoptimer').html("Start Timer");
+    }
   }
 }
 
@@ -149,7 +165,7 @@ var tid = setInterval(myCode, 1000);
 function myCode() {
   if (gameoflife_viewjq.run === 1) {
     gameoflife_viewjq.step();
-    $('#cycles').val(gameoflife_viewjq.gol.numSteps);
+    
   }
 }
 

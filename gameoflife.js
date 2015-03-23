@@ -6,6 +6,7 @@
 var gameoflife = {
   cells: [],
   numSteps: 0,
+  population: 0,
 
   setBoardSize: function(n) {
     var i,j;
@@ -25,9 +26,13 @@ var gameoflife = {
     var i,j;
     var value;
 
+    this.population = 0;
     for (i=0; i<this.cells.length; i++) {
       for (j=0; j<this.cells[i].length; j++) {
         this.cells[i][j] = (Math.random() < pct) ? 1 : 0;
+        if (this.cells[i][j] === 1) {
+          this.population++;
+        }
       }
     }
     this.numSteps = 0;
@@ -38,11 +43,12 @@ var gameoflife = {
     var deltai, deltaj;
     var targeti, targetj;
     var numLiveNeighbors;
-    var newCells;
+    var tempCells, newCells;
 
     newCells = this.initializeNewCells();
     //console.log(newCells);
 
+    this.population = 0;
     for (i=0; i<this.cells.length; i++) {
       for (j=0; j<this.cells[i].length; j++) {
         numLiveNeighbors = 0;
@@ -76,10 +82,19 @@ var gameoflife = {
             newCells[i][j] = 1;
           }
         }
+        if (newCells[i][j] === 1) {
+          this.population++;
+        }
       }
     }
     //console.log(newCells);
+
+    // Swap the cells array (try to only use 2 sets of arrays by swapping them
+    // rather than making a new one each cycle
+    this.tempCells = this.cells;
     this.cells = newCells;
+    this.newCells = this.tempCells;
+
     this.numSteps++;
   },
 
