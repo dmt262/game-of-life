@@ -61,6 +61,8 @@ var gameoflife_viewjq = {
   cellDivs: [],
   run: 0,
 
+  that: this,
+
   buildboard: function (n, pct) {
     var thisBoard;
     var thisRow;
@@ -88,7 +90,7 @@ var gameoflife_viewjq = {
           thisCell.addClass("on");
         }
         thisCell.attr("id", "c_"+i+"_"+j);
-
+        thisCell.click(gameoflife_viewjq.onClick);
         //console.log(i+","+j+": "+board[i][j]);
         //console.log(thisCell);
         thisRow.append(thisCell);
@@ -111,26 +113,28 @@ var gameoflife_viewjq = {
     //thisBoard.empty();
     for (i=0; i<this.gol.cells.length; i++) {  // rows
       for (j=0; j<this.gol.cells[i].length; j++) {
-        thisCell =(typeof this.cellDivs[i][j] != 'undefined') ? this.cellDivs[i][j] : $("<div>");
-        thisCell.addClass("cell");
-        thisCell.removeClass("on");
-        if (this.gol.cells[i][j] === 1) {
-          thisCell.addClass("on");
-        }
-        thisCell.attr("id", "c_"+i+"_"+j);
-        //console.log(i+","+j+": "+board[i][j]);
-        //console.log(thisCell);
-        //thisRow.append(thisCell);
-    //    thisCell = $("<div class=\"cell\" id=\"c_"+i+"_"+j+"\"></div>").appendTo(thisRow);
+        this.displayCell(i,j);
       }
+    }
+
+    $('#cycles').html(gameoflife_viewjq.gol.numSteps);
+    $('#population').html(gameoflife_viewjq.gol.population);
+
+  },
+
+  displayCell: function(i, j) {
+    var thisCell;
+    thisCell = (typeof this.cellDivs[i][j] != 'undefined') ? this.cellDivs[i][j] : $("<div>");
+    thisCell.addClass("cell");
+    thisCell.removeClass("on");
+    if (this.gol.cells[i][j] === 1) {
+      thisCell.addClass("on");
     }
   },
 
   step: function() {
     this.gol.step(); 
     this.display();
-    $('#cycles').html(gameoflife_viewjq.gol.numSteps);
-    $('#population').html(gameoflife_viewjq.gol.population);
   },
 
   toggleTimer: function () {
@@ -142,6 +146,21 @@ var gameoflife_viewjq = {
       this.run = 0;
       $('#startstoptimer').html("Start Timer");
     }
+  },
+
+  onClick: function() {
+    var rowColArr;
+    var i,j;
+    var that;
+// I don't like that this onClick has to know the name of the gol viewer object
+// I'm not certain it should be inside this object.
+
+    rowColArr = this.id.split('_');
+    console.log(rowColArr);
+    i = rowColArr[1];
+    j = rowColArr[2];
+    gameoflife_viewjq.gol.cells[i][j] = (gameoflife_viewjq.gol.cells[i][j] + 1) % 2;
+    gameoflife_viewjq.displayCell(i, j);
   }
 }
 
