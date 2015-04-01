@@ -4,6 +4,7 @@
   <title>Game of Life</title>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script src="gameoflife.js"></script>
+  <link rel="stylesheet" type="text/css" href="gameoflife.css";
 </head>
 <body>
 
@@ -38,24 +39,23 @@
     Population: <span id="population"></span><br \>
   </div>
 
-  <div id="board" class="board">
-     <div class="row" id="r_0">
-      <div class="cell" id="c_0_0"></div>
-      <div class="cell on" id="c_0_1"> </div>
-    </div>
-    <div class="row" id="r_0">
-      <div class="cell on" id="c_0_0"></div>
-      <div class="cell" id="c_0_1"> </div>
-    </div>
+  <div id="board" class="board">  <!-- This will get filled in -->
   </div>
 </div>
 
 
 <script>
-console.log("I am here");
 
-
-
+// This object has as one of it's members the gol object defined in gameoflife.js
+// This object does not concern itself with the rules of the gol, rather just
+// displaying the cells in the form of a <div> array.
+//
+// cellDivs[] is the array that keeps the jquery object representing the
+// divs for each cell.  This is cached in the array to speed up execution.
+//
+// _viewjq = View (ala MVC), jq = jquery.
+// I'll work on another version that uses angular as the view
+//
 var gameoflife_viewjq = {
   gol: gameoflife,
   cellDivs: [],
@@ -63,44 +63,55 @@ var gameoflife_viewjq = {
 
   that: this,
 
+  // This function builds the initial board, and sets the initial values
+  // To just re-display a newly stepped board, use the display() method
+
   buildboard: function (n, pct) {
     var thisBoard;
     var thisRow;
     var thisCell;
 
+    // Start buy have the gol object build up it's own internal array of cells
     this.gol.setBoardSize(n);
     this.gol.setRandomBoard(pct);
     
+    // Now, build up a parallel array to store the associated divs to represent
+    // each cell.
+
     thisBoard = $('#board');
     //console.log(thisBoard);
     thisBoard.empty();
     for (i=0; i<this.gol.cells.length; i++) {  // rows
-      this.cellDivs.push([]);
+      this.cellDivs.push([]);  // add an empty array to store the columns
+      // Build up the div object to be stored in the above array
       thisRow = $("<div>");
       thisRow.addClass("row");
-      thisRow.attr("id", "r_"+i);
-    //  thisRow = $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
-      $("#board").append(thisRow); //  $("<div class=\"row\" id=\"r_"+i+"></div>").appendTo("#board");
-      //console.log(thisRow);
+      thisRow.attr("id", "r_"+i);  // row divs are id= r_0, r_1, ... r_n
+      //  Add the row div to the array
+      $("#board").append(thisRow); 
+
+      //  Now.. for each column in that row, make and add another nested div object
       for (j=0; j<this.gol.cells[i].length; j++) {
+        // Build up the inner div
         thisCell = $("<div>");
         this.cellDivs[i][j] = thisCell;
         thisCell.addClass("cell");
         if (this.gol.cells[i][j] === 1) {
           thisCell.addClass("on");
         }
-        thisCell.attr("id", "c_"+i+"_"+j);
+        thisCell.attr("id", "c_"+i+"_"+j);  // cell divs are c_0_0, c_0_1, ... c_n_n
         thisCell.click(gameoflife_viewjq.onClick);
-        //console.log(i+","+j+": "+board[i][j]);
-        //console.log(thisCell);
+        // Add the Cell to the row div
         thisRow.append(thisCell);
+        // Save the div object to the cache (cellDivs[]) for later reference
         this.cellDivs[i].push(thisCell);
-    //    thisCell = $("<div class=\"cell\" id=\"c_"+i+"_"+j+"\"></div>").appendTo(thisRow);
       }
     }
   },
   
-// Make this function not create the new divs - just set the class to cell or cell, on for each div
+  // This method loops over the gol object cells[] and sets the corresponding
+  // cellDivss[] object to have the proper classes to be live/dead
+
   display:  function () {
            
     var thisBoard;
@@ -122,6 +133,12 @@ var gameoflife_viewjq = {
 
   },
 
+
+  // Assigns the on class to a div if the corresponding cell is live.
+  // I pulled this functionality out so that the onClick() method could
+  // toggle the value of a clicked cell - and we could then update the 
+  // board with the new value
+
   displayCell: function(i, j) {
     var thisCell;
     thisCell = (typeof this.cellDivs[i][j] != 'undefined') ? this.cellDivs[i][j] : $("<div>");
@@ -132,10 +149,15 @@ var gameoflife_viewjq = {
     }
   },
 
+  // Step the board one life-cycle, display the new board
+
   step: function() {
     this.gol.step(); 
     this.display();
   },
+
+  // Timmer is always running.  This toggles this objects
+  // .run property
 
   toggleTimer: function () {
     
@@ -148,72 +170,51 @@ var gameoflife_viewjq = {
     }
   },
 
+  // This is the onClick callback function
+  // $this is bound to the div that was clicked.
   onClick: function() {
     var rowColArr;
     var i,j;
     var that;
-// I don't like that this onClick has to know the name of the gol viewer object
-// I'm not certain it should be inside this object.
 
+    // I don't like that this onClick has to know the name of the gol viewer object
+    // I'm not certain it should be inside this object.
+
+    // get this cell's coordinates so we can toggle it's value
     rowColArr = this.id.split('_');
-    console.log(rowColArr);
     i = rowColArr[1];
     j = rowColArr[2];
-    gameoflife_viewjq.gol.cells[i][j] = (gameoflife_viewjq.gol.cells[i][j] + 1) % 2;
-    gameoflife_viewjq.displayCell(i, j);
+
+    gameoflife_viewjq.gol.cells[i][j] = (gameoflife_viewjq.gol.cells[i][j] + 1) % 2;  // This trick toggles the value
+    gameoflife_viewjq.displayCell(i, j);  // now display the new value
   }
 }
 
+// Ahhhh.  Now that al lthe object have been defined, time to actually do some work
+// Build the board, then display the board.
+// The timmer will start running as soon as the page is ready and the
+// viewjq object will start stepping the board through it's life-cycles 
+// when the user sets the .run property (via the Start/Stop Timer button)
 
+$(document).ready(function() {
+  gameoflife_viewjq.buildboard(50,0.2);
+  gameoflife_viewjq.display();
 
-gameoflife_viewjq.buildboard(50,0.2);
-//gameoflife_viewjq.gol.setRandomBoard(0.2);
-//console.log(gameoflife_viewjq.gol.cells);
-//console.log(gameoflife_viewjq.cellDivs);
+  // Start the internval timer.
+  var tid = setInterval(tickTock, 1000);
+});
 
-gameoflife_viewjq.display();
+// Clock function
+function tickTock() {
+  // Timer is always running.  If the .run property ===1, step to the next life-cycle
 
-var tid = setInterval(myCode, 1000);
-
-function myCode() {
   if (gameoflife_viewjq.run === 1) {
-    gameoflife_viewjq.step();
-    
+    gameoflife_viewjq.step();  
   }
 }
 
 
 </script>
-
-<style>
-  .board {
-    display: table;
-  }
-
-  .row {
-    display: table-row;
-  }
-
-  .cell {
-    display: table-cell;
-    background-color: #111111;
-    width: 10px;
-    height: 10px;
-    border: 0px;
-    margin: 5px;
-    -webkit-transition-property: background-color;
-    -webkit-transition-duration: 0.5s;
-    -webkit-transition-timing-function: ease-in;
-    transition-property: background-color;
-    transition-duration: 0.5s;
-    transition-timing-function: ease-in;
-  }
-  .on {
-    background-color: #999999;
-  }
-</style>
-
-
 
 </body>
 </html>

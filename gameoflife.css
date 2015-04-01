@@ -1,0 +1,43 @@
+  
+
+  /* game of life board is in a table format - so use table...  */
+  .board {
+    display: table;
+  }
+
+  /* similarly with rows */
+  .row {
+    display: table-row;
+  }
+
+  /*
+    Cells
+  */
+  .cell {
+    display: table-cell;
+    background-color: #111111;   /* Display a dead cell by default (dark) */
+    width: 10px;
+    height: 10px;
+    border: 0px;
+    margin: 5px;
+    /*
+    Add some fancy transitions when a cell changes live/dead state
+    This helps make steps seem less discrete - more like real life
+    -- well as best as we can do... 
+    */
+    -webkit-transition-property: background-color;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease-in;
+    transition-property: background-color;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-in;
+  }
+
+  /*
+  Cells that are live are displayed with a whiter colored cell 
+  Add the "on" class to a cell and it will light up.  
+  Remove the "on clsss and it will darken"
+  */
+  .on {
+    background-color: #999999;
+  }
