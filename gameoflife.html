@@ -9,53 +9,65 @@
 </head>
 <body>
 
-<h1>Game of Life</h1>
 
 <style>
 
-#controls {
-  border-width: 1px;
-  border-style: solid;
-  width: 500px;
-  padding: 3px;
-  margin: 3px;
+body {
 }
+
+
 
 </style>
 
-<div id="gameoflife">
-  <div id="controls" style>
-    <h2>Rules:</h2>
-    <ol>
-      <li>Any live cell with fewer than two live neighbours dies, as if caused by under-population.</li>
-      <li>Any live cell with two or three live neighbours lives on to the next generation.</li>
-      <li>Any live cell with more than three live neighbours dies, as if by overcrowding.</li>
-      <li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
-    </ol>
-    
-    <select id="rndpct">
-       <option value="0.1">0.1</value>
-       <option value="0.2">0.2</value>
-       <option value="0.3">0.3</value>
-       <option value="0.4">0.4</value>
-       <option value="0.5">0.5</value>
-       <option value="0.6">0.6</value>
-       <option value="0.7">0.7</value>
-       <option value="0.8">0.8</value>
-       <option value="0.9">0.9</value>
-       <option value="1.0">1.0</value>
-    </select>
-    <button onclick="gameoflife_viewjq.gol.setRandomBoard($('#rndpct').val());  gameoflife_viewjq.display();">Randomize Board</button>
-    <button onclick="gameoflife_viewjq.step();">Step</button>
-    <button id="startstoptimer" onclick="gameoflife_viewjq.toggleTimer();">Start Timer</button>
-    Cycles: <span id="cycles"></span>
-    Population: <span id="population"></span><br \>
-  </div>
+<div id="main">
 
-  <div id="board" class="board">  <!-- This will get filled in -->
-  </div>
-</div>
 
+  <div id="gameoflife">
+    <h1>Game of Life</h1>
+    <div id="rules" style=''>
+      <h2>Rules: </h2><span id="rulesmore" style="" onclick="ruletoggle()">more vvv</span>
+      <span id="therules" style="display: none;">
+        <ol>
+          <li>Any live cell with fewer than two live neighbours dies, as if caused by under-population.</li>
+          <li>Any live cell with two or three live neighbours lives on to the next generation.</li>
+          <li>Any live cell with more than three live neighbours dies, as if by overcrowding.</li>
+          <li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
+        </ol>
+      </span>
+      <span id="rulesless" style="display: none"  onclick="ruletoggle()">less ^^^</span>
+    </div>
+
+    <div id="controls"> 
+      <select id="rndpct">
+         <option value="0.1">0.1</value>
+         <option value="0.2">0.2</value>
+         <option value="0.3">0.3</value>
+         <option value="0.4">0.4</value>
+         <option value="0.5">0.5</value>
+         <option value="0.6">0.6</value>
+         <option value="0.7">0.7</value>
+         <option value="0.8">0.8</value>
+         <option value="0.9">0.9</value>
+         <option value="1.0">1.0</value>
+      </select>
+      <button onclick="gameoflife_viewjq.gol.setRandomBoard($('#rndpct').val());  gameoflife_viewjq.display();">Randomize Board</button>
+      <button onclick="gameoflife_viewjq.step();">Step</button>
+      <button id="startstoptimer" onclick="gameoflife_viewjq.toggleTimer();">Start Timer</button>
+      <image id="draghandle" src='images/mousemove.png' style='display: relative; left: 400px; top: 0px; width: 20px; float: right;'></image>
+    </div>
+  
+    <div id="stats">
+      <div id="thestats">
+            Cycles: <span id="cycles"></span>
+        Population: <span id="population"></span><br \>
+      </div>
+    </div>
+
+    <div id="board" class="board">  <!-- This will get filled in -->
+  
+    </div>
+  </div>
+</div>  
 
 <script>
 
@@ -212,13 +224,17 @@ var gameoflife_viewjq = {
 $(document).ready(function() {
   gameoflife_viewjq.buildboard(50,0.2);
   gameoflife_viewjq.display();
- $("#controls").draggable();
+ $("#controls").draggable({handle: "#draghandle"});
  
     // Start the internval timer.
   var tid = setInterval(tickTock, 1000);
 });
 
-
+function ruletoggle() {
+  $("#rulesmore").toggle();
+  $("#rulesless").toggle();
+  $("#therules").css("display", $("#rulesless").css("display"));
+}
 
 // Clock function
 function tickTock() {

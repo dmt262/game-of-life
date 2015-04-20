@@ -1,43 +1,128 @@
   
+/* Resets and Overrides */
 
-  /* game of life board is in a table format - so use table...  */
-  .board {
-    display: table;
-  }
+* {  
+}
 
-  /* similarly with rows */
-  .row {
-    display: table-row;
-  }
+/* tags (links & type )*/
 
+/* Layout */
+
+/* callout boxes */
+
+/* form elements */
+
+/* misc */
+
+html {
+}
+
+#main {
+  position: fixed;
+  width: 100%;  
+  background: url("images/game-of-life-animation.gif") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-color: #666666;
+/*  margin: 0 auto; */
+/*
+  background-image: url("images/game-of-life-animation.gif"); 
+  background-color: #cccccc;
+*/
+}
+
+#main:before {
+  opacity: 0.2;
+  content : ""; 
+ /*
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+*/    
+}
+
+#gameoflife {
+  position: relative;
+  top: 0px; 
+  right: 0px; 
+  width: 500px;
+  margin: 0 auto;
+}
+
+#rules, #controls, #stats, #board {
+  display: relative; 
+  border-width: 1px;
+  border-style: solid;
+  padding: 3px;
+  margin: 3px;
+  width: 100%;
+}
+
+#therules {
+  font-weight: none; 
+  font-size: smaller;
+}
+
+#controls {
+}
+
+#board {
+}
+
+#stats {
+}
+
+#thestats {
+  float: right;
+}
+
+/*
+
+These are for the board itself and it's elements
+
+*/
+/* game of life board is in a table format - so use table...  */
+
+.board {
+  display: table;
+}
+/* similarly with rows */
+.row {
+  display: table-row;
+}
+/*
+  Cells
+*/
+.cell {
+  display: table-cell;
+  background-color: #111111;   /* Display a dead cell by default (dark) */
+  width: 10px;
+  height: 10px;
+  border: 0px;
+  margin: 5px;
   /*
-    Cells
+  Add some fancy transitions when a cell changes live/dead state
+  This helps make steps seem less discrete - more like real life
+  -- well as best as we can do... 
   */
-  .cell {
-    display: table-cell;
-    background-color: #111111;   /* Display a dead cell by default (dark) */
-    width: 10px;
-    height: 10px;
-    border: 0px;
-    margin: 5px;
-    /*
-    Add some fancy transitions when a cell changes live/dead state
-    This helps make steps seem less discrete - more like real life
-    -- well as best as we can do... 
-    */
-    -webkit-transition-property: background-color;
-    -webkit-transition-duration: 0.5s;
-    -webkit-transition-timing-function: ease-in;
-    transition-property: background-color;
-    transition-duration: 0.5s;
-    transition-timing-function: ease-in;
-  }
-
-  /*
-  Cells that are live are displayed with a whiter colored cell 
-  Add the "on" class to a cell and it will light up.  
-  Remove the "on clsss and it will darken"
-  */
-  .on {
-    background-color: #999999;
-  }
+  -webkit-transition-property: background-color;
+  -webkit-transition-duration: 0.5s;
+  -webkit-transition-timing-function: ease-in;
+  transition-property: background-color;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in;
+}
+/*
+Cells that are live are displayed with a whiter colored cell 
+Add the "on" class to a cell and it will light up.  
+Remove the "on clsss and it will darken"
+*/
+.on {
+  background-color: #999999;
+}
